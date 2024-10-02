@@ -20,7 +20,7 @@
         <h2 class="visually-hidden">Добавить задачу</h2>
         <form class="add-task__form" aria-label="Форма добавления задачи">
           <div class="add-task__input-wrapper">
-          <label for="add-task">Новая задача</label>
+            <label for="add-task">Новая задача</label>
             <input type="text" name="task-name" id="add-task" placeholder="Название задачи..." required>
           </div>
           <button class="add-task__button button" type="submit">
@@ -105,9 +105,9 @@
           </div>
           <div class="taskboard__item task task--processing">
             <div class="task__body">
-                <p class="task__view">Название первой задачи</p>
-                <input class="task__input" type="text" value="Название первой задачи">
-              </div>
+              <p class="task__view">Название первой задачи</p>
+              <input class="task__input" type="text" value="Название первой задачи">
+            </div>
             <button class="task__edit" type="button" aria-label="Изменить"></button>
           </div>
         </article>
@@ -168,6 +168,19 @@
       </section>
     </div>
   </main>
+
+  <!-- Карточка задачи -->
+  <template id="task">
+    <div class="taskboard__item task">
+      <div class="task__body">
+        <p class="task__view">Название первой задачи</p>
+        <input class="task__input" type="text" value="Название первой задачи">
+      </div>
+      <button class="task__edit" type="button" aria-label="Изменить"></button>
+    </div>
+  </template>
+
   <script src="js/script.js" type="module"></script>
 </body>
+
 </html>
