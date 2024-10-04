@@ -1,4 +1,4 @@
-import { makeTaskEditable } from "./task.js";
+import { makeTaskEditable } from './task.js';
 
 const taskboardContainer = document.querySelector('.taskboard');
 

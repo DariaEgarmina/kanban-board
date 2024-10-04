@@ -6,9 +6,9 @@ const clearButtonElement = document.querySelector('.button--clear');
 const emptyItemElement = document.querySelector('.task--empty-trash');
 
 const deleteTask = (elements) => {
-  for (let i = 0; i < elements.length; i++) {
-    elements[i].remove();
-  }
+  [...elements].forEach((element) => {
+    element.remove();
+  });
 };
 
 const toggleButtonState = (disabled) => {
