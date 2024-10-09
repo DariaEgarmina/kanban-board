@@ -28,7 +28,8 @@
 }
 
 .task:hover {
-  cursor: pointer;
+  /* cursor: pointer; */
+  cursor: move;
 }
 
 .task p {

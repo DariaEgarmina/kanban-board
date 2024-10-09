@@ -7,3 +7,5 @@ taskboardContainer.addEventListener('click', (evt) => {
     makeTaskEditable(evt.target);
   }
 });
+
+export { taskboardContainer };
