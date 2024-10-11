@@ -19,19 +19,7 @@ const getNextElement = (cursorPosition, currentElement) => {
   return nextElement;
 };
 
-makeElementsDraggable();
-
-taskboardContainer.addEventListener('dragstart', (evt) => {
-  evt.target.classList.add('selected');
-});
-
-taskboardContainer.addEventListener('dragend', (evt) => {
-  evt.target.classList.remove('selected');
-});
-
-taskboardContainer.addEventListener('dragover', (evt) => {
-  evt.preventDefault();
-
+const moveElement = (evt) => {
   const activeElement = taskboardContainer.querySelector('.selected');
   const currentElement = evt.target;
   const isMoveable = activeElement !== currentElement &&
@@ -56,6 +44,42 @@ taskboardContainer.addEventListener('dragover', (evt) => {
   } else {
     nextElement.before(activeElement);
   }
+};
+
+const removeClass = (element) => {
+  const classes = [...element.classList];
+  const result = classes.find((item) => item.includes('task--'));
+
+  if (result) {
+    element.classList.remove(result);
+  }
+};
+
+const addClass = (element) => {
+  const grandParent = element.parentElement.parentElement;
+
+  if (grandParent.classList.contains('taskboard__group--processing')) {
+    element.classList.add('task--processing');
+  } else if (grandParent.classList.contains('taskboard__group--done')) {
+    element.classList.add('task--done');
+  } else if (grandParent.classList.contains('taskboard__group--basket')) {
+    element.classList.add('task--basket');
+  }
+};
+
+makeElementsDraggable();
+
+taskboardContainer.addEventListener('dragstart', (evt) => {
+  evt.target.classList.add('selected');
+  removeClass(evt.target);
 });
 
+taskboardContainer.addEventListener('dragend', (evt) => {
+  evt.target.classList.remove('selected');
+  addClass(evt.target);
+});
 
+taskboardContainer.addEventListener('dragover', (evt) => {
+  evt.preventDefault();
+  moveElement(evt);
+});

@@ -4,6 +4,8 @@ const taskboardItemTemplate = document.querySelector('#task').content.querySelec
 
 const addNewTask = () => {
   const taskboardItemElement = taskboardItemTemplate.cloneNode(true);
+  taskboardItemElement.draggable = true;
+
   const taskboardItemText = taskboardItemElement.querySelector('.task__view');
   const taskboardInput = taskboardItemElement.querySelector('.task__input');
 
