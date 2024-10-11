@@ -11,4 +11,4 @@ toggleEmptyItemState(emptyDoneItemElement, 'none');
 
 toggleEmptyItemState(emptyTrashItemElement, 'none');
 
-export { toggleEmptyItemState, emptyTrashItemElement };
+export { toggleEmptyItemState, emptyTrashItemElement, emptyDoneItemElement };

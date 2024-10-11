@@ -1,10 +1,15 @@
 import { taskboardContainer } from './taskboard.js';
+import { toggleEmptyItemState, emptyDoneItemElement } from './hide-empty.js';
 
 const taskElements = document.querySelectorAll('.task');
 
 const makeElementsDraggable = () => {
   for (const task of taskElements) {
-    task.draggable = true;
+    if (task.classList.contains('task--empty')) {
+      task.draggable = false;
+    } else {
+      task.draggable = true;
+    }
   }
 };
 
@@ -77,6 +82,15 @@ taskboardContainer.addEventListener('dragstart', (evt) => {
 taskboardContainer.addEventListener('dragend', (evt) => {
   evt.target.classList.remove('selected');
   addClass(evt.target);
+
+  const doneContainer = document.querySelector('.taskboard__list--done');
+  const children = doneContainer.querySelectorAll('.taskboard__item ');
+
+  if (children.length === 1) {
+    toggleEmptyItemState(emptyDoneItemElement, 'block');
+  } else {
+    toggleEmptyItemState(emptyDoneItemElement, 'none');
+  }
 });
 
 taskboardContainer.addEventListener('dragover', (evt) => {

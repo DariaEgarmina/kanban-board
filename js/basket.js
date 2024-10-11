@@ -1,11 +1,11 @@
 import { toggleEmptyItemState, emptyTrashItemElement } from './hide-empty.js';
 
 const trashItemsContainer = document.querySelector('.taskboard__list--trash');
-const trashItems = trashItemsContainer.querySelectorAll('.task--basket');
 
 const clearButtonElement = document.querySelector('.button--clear');
 
-const deleteTask = (elements) => {
+const deleteTask = (container, className) => {
+  const elements = container.querySelectorAll(className);
   [...elements].forEach((element) => {
     element.remove();
   });
@@ -18,10 +18,12 @@ const toggleButtonState = (disabled) => {
 clearButtonElement.addEventListener('click', (evt) => {
   evt.preventDefault();
 
-  if (trashItems.length > 0) {
-    deleteTask(trashItems);
-  }
+  const trashItems = trashItemsContainer.querySelectorAll('.task--basket');
 
-  toggleButtonState(true);
-  toggleEmptyItemState(emptyTrashItemElement, 'block');
+  if (trashItems.length > 0) {
+    deleteTask(trashItemsContainer, '.task--basket');
+
+    toggleButtonState(true);
+    toggleEmptyItemState(emptyTrashItemElement, 'block');
+  }
 });
