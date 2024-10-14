@@ -1,7 +1,12 @@
 import { taskboardContainer } from './taskboard.js';
-import { toggleEmptyItemState, emptyDoneItemElement } from './hide-empty.js';
+import { toggleEmptyItemState, emptyBacklogItemElement, emptyProcessingItemElement, emptyDoneItemElement, emptyTrashItemElement } from './empty-banner.js';
+import { trashContainer, toggleButtonState } from './basket.js';
 
 const taskElements = document.querySelectorAll('.task');
+
+const backlogContainer = document.querySelector('.taskboard__list--backlog');
+const processingContainer = document.querySelector('.taskboard__list--processing');
+const doneContainer = document.querySelector('.taskboard__list--done');
 
 const makeElementsDraggable = () => {
   for (const task of taskElements) {
@@ -72,6 +77,29 @@ const addClass = (element) => {
   }
 };
 
+
+const clearColumns = (container, element) => {
+  const items = container.querySelectorAll('.taskboard__item ');
+
+  if (items.length === 1) {
+    toggleEmptyItemState(element, 'block');
+  } else {
+    toggleEmptyItemState(element, 'none');
+  }
+};
+
+const clearTrashColumn = () => {
+  const items = trashContainer.querySelectorAll('.taskboard__item ');
+
+  if (items.length === 1) {
+    toggleEmptyItemState(emptyTrashItemElement, 'block');
+    toggleButtonState(true);
+  } else {
+    toggleEmptyItemState(emptyTrashItemElement, 'none');
+    toggleButtonState(false);
+  }
+};
+
 makeElementsDraggable();
 
 taskboardContainer.addEventListener('dragstart', (evt) => {
@@ -83,14 +111,11 @@ taskboardContainer.addEventListener('dragend', (evt) => {
   evt.target.classList.remove('selected');
   addClass(evt.target);
 
-  const doneContainer = document.querySelector('.taskboard__list--done');
-  const children = doneContainer.querySelectorAll('.taskboard__item ');
 
-  if (children.length === 1) {
-    toggleEmptyItemState(emptyDoneItemElement, 'block');
-  } else {
-    toggleEmptyItemState(emptyDoneItemElement, 'none');
-  }
+  clearColumns(backlogContainer, emptyBacklogItemElement);
+  clearColumns(processingContainer, emptyProcessingItemElement);
+  clearColumns(doneContainer, emptyDoneItemElement);
+  clearTrashColumn();
 });
 
 taskboardContainer.addEventListener('dragover', (evt) => {
