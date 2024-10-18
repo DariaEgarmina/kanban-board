@@ -58,7 +58,8 @@ const moveElement = (evt) => {
 
 const removeClass = (element) => {
   const classes = [...element.classList];
-  const result = classes.find((item) => item.includes('task--'));
+  const semiResult = classes.filter((item) => !item.includes('task--dragged'));
+  const result = semiResult.find((item) => item.includes('task--'));
 
   if (result) {
     element.classList.remove(result);
@@ -76,7 +77,6 @@ const addClass = (element) => {
     element.classList.add('task--basket');
   }
 };
-
 
 const clearColumns = (container, element) => {
   const items = container.querySelectorAll('.taskboard__item ');
@@ -104,13 +104,14 @@ makeElementsDraggable();
 
 taskboardContainer.addEventListener('dragstart', (evt) => {
   evt.target.classList.add('selected');
+  evt.target.classList.add('task--dragged');
   removeClass(evt.target);
 });
 
 taskboardContainer.addEventListener('dragend', (evt) => {
   evt.target.classList.remove('selected');
+  evt.target.classList.remove('task--dragged');
   addClass(evt.target);
-
 
   clearColumns(backlogContainer, emptyBacklogItemElement);
   clearColumns(processingContainer, emptyProcessingItemElement);
