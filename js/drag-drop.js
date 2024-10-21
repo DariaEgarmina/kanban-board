@@ -99,12 +99,16 @@ const clearColumnsState = () => {
 
 const checkIfEmptyShown = (container, emptyElement) => {
   const items = container.querySelectorAll('.taskboard__item');
-  toggleEmptyItemState(emptyElement, items.length === 2 ? 'none' : 'block');
+  if (items.length === 2) {
+    toggleEmptyItemState(emptyElement, 'none');
+  } else if (items.length === 1) {
+    toggleEmptyItemState(emptyElement, 'block');
+  }
 };
 
 const changeEmptyBunner = () => {
-  checkIfEmptyShown(backlogContainer, emptyBacklogItemElement); // С этим элементом всё ломается
-  checkIfEmptyShown(processingContainer, emptyProcessingItemElement); // С этим элементом всё ломается
+  checkIfEmptyShown(backlogContainer, emptyBacklogItemElement);
+  checkIfEmptyShown(processingContainer, emptyProcessingItemElement);
   checkIfEmptyShown(doneContainer, emptyDoneItemElement);
   checkIfEmptyShown(trashContainer, emptyTrashItemElement);
 };
