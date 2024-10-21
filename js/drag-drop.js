@@ -2,19 +2,16 @@ import { taskboardContainer } from './taskboard.js';
 import { toggleEmptyItemState, emptyBacklogItemElement, emptyProcessingItemElement, emptyDoneItemElement, emptyTrashItemElement } from './empty-banner.js';
 import { trashContainer, toggleButtonState } from './basket.js';
 
-const taskElements = document.querySelectorAll('.task');
+let activeElement = null;
 
+const taskElements = document.querySelectorAll('.task');
 const backlogContainer = document.querySelector('.taskboard__list--backlog');
 const processingContainer = document.querySelector('.taskboard__list--processing');
 const doneContainer = document.querySelector('.taskboard__list--done');
 
 const makeElementsDraggable = () => {
   for (const task of taskElements) {
-    if (task.classList.contains('task--empty')) {
-      task.draggable = false;
-    } else {
-      task.draggable = true;
-    }
+    task.draggable = !task.classList.contains('task--empty');
   }
 };
 
@@ -22,15 +19,22 @@ const getNextElement = (cursorPosition, currentElement) => {
   const currentElementCoord = currentElement.getBoundingClientRect();
   const currentElementCenter = currentElementCoord.y + currentElementCoord.height / 2;
 
-  const nextElement = (cursorPosition < currentElementCenter) ?
+  return (cursorPosition < currentElementCenter) ?
     currentElement :
     currentElement.nextElementSibling;
+};
 
-  return nextElement;
+const toggleSelectedState = (state, element) => {
+  if (state) {
+    element.classList.add('selected');
+    element.classList.add('task--dragged');
+  } else {
+    element.classList.remove('selected');
+    element.classList.remove('task--dragged');
+  }
 };
 
 const moveElement = (evt) => {
-  const activeElement = taskboardContainer.querySelector('.selected');
   const currentElement = evt.target;
   const isMoveable = activeElement !== currentElement &&
     currentElement.classList.contains('task');
@@ -78,45 +82,34 @@ const addClass = (element) => {
   }
 };
 
-const clearColumns = (container, element) => {
-  const items = container.querySelectorAll('.taskboard__item ');
-
-  if (items.length === 1) {
-    toggleEmptyItemState(element, 'block');
-  } else {
-    toggleEmptyItemState(element, 'none');
-  }
+const checkAndToggleEmptyState = (container, emptyElement) => {
+  const items = container.querySelectorAll('.taskboard__item');
+  toggleEmptyItemState(emptyElement, items.length === 1 ? 'block' : 'none');
 };
 
-const clearTrashColumn = () => {
-  const items = trashContainer.querySelectorAll('.taskboard__item ');
+const clearColumnsState = () => {
+  checkAndToggleEmptyState(backlogContainer, emptyBacklogItemElement);
+  checkAndToggleEmptyState(processingContainer, emptyProcessingItemElement);
+  checkAndToggleEmptyState(doneContainer, emptyDoneItemElement);
+  checkAndToggleEmptyState(trashContainer, emptyTrashItemElement);
 
-  if (items.length === 1) {
-    toggleEmptyItemState(emptyTrashItemElement, 'block');
-    toggleButtonState(true);
-  } else {
-    toggleEmptyItemState(emptyTrashItemElement, 'none');
-    toggleButtonState(false);
-  }
+  const isTrashEmpty = trashContainer.querySelectorAll('.taskboard__item').length === 1;
+  toggleButtonState(isTrashEmpty);
 };
 
 makeElementsDraggable();
 
 taskboardContainer.addEventListener('dragstart', (evt) => {
-  evt.target.classList.add('selected');
-  evt.target.classList.add('task--dragged');
+  activeElement = evt.target;
+  toggleSelectedState(true, evt.target);
   removeClass(evt.target);
 });
 
 taskboardContainer.addEventListener('dragend', (evt) => {
-  evt.target.classList.remove('selected');
-  evt.target.classList.remove('task--dragged');
+  activeElement = null;
+  toggleSelectedState(false, evt.target);
   addClass(evt.target);
-
-  clearColumns(backlogContainer, emptyBacklogItemElement);
-  clearColumns(processingContainer, emptyProcessingItemElement);
-  clearColumns(doneContainer, emptyDoneItemElement);
-  clearTrashColumn();
+  clearColumnsState();
 });
 
 taskboardContainer.addEventListener('dragover', (evt) => {
