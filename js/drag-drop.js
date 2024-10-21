@@ -97,6 +97,18 @@ const clearColumnsState = () => {
   toggleButtonState(isTrashEmpty);
 };
 
+const checkIfEmptyShown = (container, emptyElement) => {
+  const items = container.querySelectorAll('.taskboard__item');
+  toggleEmptyItemState(emptyElement, items.length === 2 ? 'none' : 'block');
+};
+
+const changeEmptyBunner = () => {
+  checkIfEmptyShown(backlogContainer, emptyBacklogItemElement); // С этим элементом всё ломается
+  checkIfEmptyShown(processingContainer, emptyProcessingItemElement); // С этим элементом всё ломается
+  checkIfEmptyShown(doneContainer, emptyDoneItemElement);
+  checkIfEmptyShown(trashContainer, emptyTrashItemElement);
+};
+
 makeElementsDraggable();
 
 taskboardContainer.addEventListener('dragstart', (evt) => {
@@ -115,4 +127,5 @@ taskboardContainer.addEventListener('dragend', (evt) => {
 taskboardContainer.addEventListener('dragover', (evt) => {
   evt.preventDefault();
   moveElement(evt);
+  changeEmptyBunner();
 });
