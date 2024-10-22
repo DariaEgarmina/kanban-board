@@ -26,10 +26,8 @@ const getNextElement = (cursorPosition, currentElement) => {
 
 const toggleSelectedState = (state, element) => {
   if (state) {
-    element.classList.add('selected');
     element.classList.add('task--dragged');
   } else {
-    element.classList.remove('selected');
     element.classList.remove('task--dragged');
   }
 };
@@ -106,7 +104,7 @@ const checkIfEmptyShown = (container, emptyElement) => {
   }
 };
 
-const changeEmptyBunner = () => {
+const changeEmptyBanner = () => {
   checkIfEmptyShown(backlogContainer, emptyBacklogItemElement);
   checkIfEmptyShown(processingContainer, emptyProcessingItemElement);
   checkIfEmptyShown(doneContainer, emptyDoneItemElement);
@@ -131,5 +129,5 @@ taskboardContainer.addEventListener('dragend', (evt) => {
 taskboardContainer.addEventListener('dragover', (evt) => {
   evt.preventDefault();
   moveElement(evt);
-  changeEmptyBunner();
+  changeEmptyBanner();
 });
